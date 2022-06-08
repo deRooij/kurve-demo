@@ -35,6 +35,14 @@ export interface CameraSlice {
   controlsRef: React.RefObject<OrbitControls>
 }
 
+const createCameraSlice: (
+  set: SetState<Store>,
+  get: GetState<Store>
+) => CameraSlice = (set, get) => ({
+  cameraRef: null,
+  controlsRef: null
+})
+
 export interface InteractionSlice {
   width: number
   height: number
@@ -59,7 +67,8 @@ const createInteractionSlice: (
 const useStore = create<Store>((get, set) => ({
   ...createRouterSlice(get, set),
   ...createDomSlice(get, set),
-  ...createInteractionSlice(get, set)
+  ...createInteractionSlice(get, set),
+  ...createCameraSlice(get, set)
 }))
 
 export default useStore
