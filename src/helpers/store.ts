@@ -4,7 +4,7 @@ import { PerspectiveCamera } from "three"
 import type { OrbitControls } from 'three-stdlib'
 import create, { GetState, SetState } from 'zustand'
 
-export interface Store extends DomSlice, RouterSlice, InteractionSlice {}
+export interface Store extends DomSlice, RouterSlice, InteractionSlice, CameraSlice {}
 
 export interface DomSlice {
     dom: any

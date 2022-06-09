@@ -5,8 +5,9 @@ import Header from '@/config'
 import Dom from '@/components/layout/dom'
 import '@/styles/index.css'
 import dynamic from 'next/dynamic'
+import { softShadows } from '@react-three/drei'
 
-const LCanvas = dynamic(() => import('@/components/layout/canvas'), {
+const CanvasComponent = dynamic(() => import('@/components/layout/canvas'), {
   ssr: false,
 })
 
@@ -23,7 +24,7 @@ function App({ Component, pageProps = { title: 'index' } }) {
       <Dom>
         <Component {...pageProps} />
       </Dom>
-      {Component?.r3f && <LCanvas>{Component.r3f(pageProps)}</LCanvas>}
+      {Component?.r3f && <CanvasComponent>{Component.r3f(pageProps)}</CanvasComponent>}
     </>
   )
 }

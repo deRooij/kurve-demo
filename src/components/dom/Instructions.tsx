@@ -1,16 +1,28 @@
+import useStore from "@/helpers/store";
+import MultiRangeSlider from "../layout/slider/slider";
+
 export default function Instructions() {
   return (
     <div
-      className='absolute max-w-lg px-4 py-2 text-sm shadow-xl pointer-events-none select-none md:text-base top-8 left-1/2 text-gray-50 transform -translate-x-1/2'
-      style={{
-        backgroundColor: 'rgb(27, 30, 40)',
-        maxWidth: 'calc(100% - 28px)',
-      }}
+      className='absolute max-w-lg px-4 py-2 text-sm border-black rounded-lg pointer-events-none select-none max-w-{} bg-slate-400 md:text-base top-4 left-4 text-gray-50 transform'
     >
+
+
       <p className='hidden mb-8 md:block'>
-        This is a minimal starter for Nextjs + Threejs. Click on the cube to
-        navigate to the `/box` page. OrbitControls is enabled by default.
+        Test scene voor interactie in three.js
       </p>
+
+          <MultiRangeSlider
+      min={0}
+      max={10}
+      onChange={({ min, max }: { min: number; max: number }) => {
+          console.log(`min = ${min}, max = ${max}`)
+          useStore.setState({ width: min})
+      }
+        
+      }
+    />
+
       <div className='tracking-wider'>
         Step 1 - <span style={{ color: 'rgb(84, 90, 114)' }}>update:</span>
         <span style={{ color: 'rgb(249, 196, 232)' }}> @/pages/index </span>
