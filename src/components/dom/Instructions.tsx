@@ -10,6 +10,8 @@ export default function Instructions() {
 
   const controlsRef = useStore((state) => state.controlsRef)
 
+  const listeners = [useStore((state) => state.width), useStore((state) => state.height), useStore((state) => state.depth)]
+
   return (
     <div
       className='absolute w-1/4 px-4 py-2 text-sm border-black rounded-lg pointer-events-none select-none max-w-{} bg-slate-400 md:text-base top-4 left-4 text-gray-50 transform'
@@ -39,6 +41,7 @@ export default function Instructions() {
                 if(controlsRef?.current)
                 controlsRef.current.enabled = true
               }}
+              listenerValue={parseFloat(listeners[index].toFixed(1))}
             />
           </div>
         )})

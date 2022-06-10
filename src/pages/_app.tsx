@@ -6,6 +6,7 @@ import Dom from '@/components/layout/dom'
 import '@/styles/index.css'
 import dynamic from 'next/dynamic'
 import { softShadows } from '@react-three/drei'
+import { Plane, Vector3 } from 'three'
 
 const CanvasComponent = dynamic(() => import('@/components/layout/canvas'), {
   ssr: false,

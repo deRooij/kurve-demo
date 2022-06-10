@@ -15,10 +15,9 @@ const BoxComponent = () => {
   
   const [spring, api] = useSpring(() => ({
     scale: 1,
-    rotation: [0, 0, 0]
   }))
 
-  api.start({ scale: hovered ? 1.2 : 1, rotation: hovered ? [0, Math.PI, 0] : [0, 0, 0]})
+  api.start({ scale: hovered ? 1.2 : 1})
 
   useFrame((state, delta) => {}
     // mesh.current

@@ -15,6 +15,7 @@ interface SliderProps {
   onChange: (value: number) => void
   onMouseDown: () => void
   onMouseUp: () => void
+  listenerValue: number
 }
 
 const Slider = ({
@@ -24,11 +25,16 @@ const Slider = ({
   step,
   onChange,
   onMouseDown,
-  onMouseUp
+  onMouseUp,
+  listenerValue
 }: SliderProps) => {
   const [currentValue, setcurrentValue] = useState(value);
   const valueRef = useRef<HTMLInputElement>(null);
   const track = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setcurrentValue(listenerValue)
+  }, [listenerValue])
 
   // Convert to percentage
   const getPercent = useCallback(

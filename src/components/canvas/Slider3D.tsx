@@ -1,6 +1,5 @@
 import useStore from "@/helpers/store"
 import { useSpring, animated } from "@react-spring/three"
-import { useAspect } from "@react-three/drei"
 import { useThree } from "@react-three/fiber"
 import { useDrag } from "@use-gesture/react"
 import { useEffect, useRef, useState } from "react"
@@ -8,84 +7,73 @@ import { Plane, Vector3 } from "three"
 import { clamp } from "three/src/math/MathUtils"
 
 export interface Slider3DProps{
-  position: Vector3
+  origin: Vector3
   width: number
   min: number
   max: number
+  floorPlane: Plane
+  setIsDragging: (value: boolean) => void 
 }
 
 const Slider3D = ({
-  position,
+  origin,
   width,
   min,
   max,
+  floorPlane,
+  setIsDragging
 }: Slider3DProps) => {
-
-  const controlsRef = useStore((state) => state.controlsRef)
-
   const thumbPos = -((useStore((state) => state.width) / max) * width)
-  const xPos = -position.x
-
-  const thumbRef = useRef()
+  const xPos = -origin.x
 
   const [pos, setPos] = useState([thumbPos, 0, 0])
-  const [isDragging, setIsDragging] = useState(false)
-  const { size, viewport } = useThree();
-  const aspect = size.width / viewport.width;
+  const [hovered, setHovered] = useState(false)
 
-  const floorPlane = new Plane(new Vector3(0, 1, 0), 0);
-  let planeIntersectPoint = new Vector3();
-
-  
   const [spring, api] = useSpring(() => ({
     position: pos,
     scale: 1,
-    rotation: [0, 0, 0],
-    config: { friction: 10 }
+    config: { friction: 12 }
   }));
 
+   let planeIntersectPoint = new Vector3();
    const bind = useDrag(
-    ({ active, movement: [x], timeStamp, event }) => {
+    ({ active, timeStamp, event }) => {
       if (active) {
         event.ray.intersectPlane(floorPlane, planeIntersectPoint);
-        console.log(planeIntersectPoint.x)
-        setPos([clamp(planeIntersectPoint.x - position.x, -3, 0), 0, 0]);
 
-        if(controlsRef?.current)
-        controlsRef.current.enabled = false
+        const xPosition = clamp(planeIntersectPoint.x - origin.x, -width, 0)
+        const localPosition = [xPosition, 0, 0]
+        setPos(localPosition);
 
-      }else{
-       if(controlsRef?.current)
-        controlsRef.current.enabled = true
+        const sliderValue = clamp((Math.abs(pos[0]) / 3) * 10, 0.1, 10)
+        useStore.setState({width: sliderValue})
+
+         
       }
 
       setIsDragging(active);
 
       api.start({
-        // position: active ? [x / aspect, -y / aspect, 0] : [0, 0, 0],
         position: pos,
-        scale: active ? 1.1 : 1,
+        scale: active ? 1.2 : hovered ? 1.4 : 1,
+
       });
       return timeStamp;
     },
     { delay: true }
   );
-
   return (
     <>
-
-
-
-    <group position={position}>
+     <group position={origin}>
       {/* Track: */}
-      <mesh castShadow position={[xPos, 0, 0]}>
-        <boxBufferGeometry args={[width + 0.2, 0.1, 0.1]} />
+      <mesh castShadow position={[xPos, 0, 0]} rotation={[0, 0, Math.PI * 0.5]}>
+        <cylinderBufferGeometry args={[0.025, 0.025, width + 0.2, 16, 5]}  />
         <meshBasicMaterial color="black" />
       </mesh>
       {/* Thumb */}
-      <animated.mesh ref={thumbRef} castShadow {...spring} {...bind()}>
+      <animated.mesh castShadow {...spring} {...bind()} >
         <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
-        <meshBasicMaterial color="red" />
+        <meshBasicMaterial color="red"/>
       </animated.mesh>
       {/* Left border */}
       <mesh castShadow position={[0.15, 0, 0]}>
