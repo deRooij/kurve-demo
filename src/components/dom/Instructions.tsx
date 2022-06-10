@@ -1,47 +1,48 @@
 import useStore from "@/helpers/store";
 import Slider from "../layout/slider/slider";
-import MultiRangeSlider from "../layout/slider/slider";
+
+const axes = { width: { name: "width", func: (width: number) => { useStore.setState({width})}},
+               height: { name: "height", func: (height: number) => { useStore.setState({height})}},
+               depth: { name: "depth", func: (depth: number) => { useStore.setState({depth})}}
+            }
 
 export default function Instructions() {
+
+  const controlsRef = useStore((state) => state.controlsRef)
+
   return (
     <div
-      className='absolute max-w-lg px-4 py-2 text-sm border-black rounded-lg pointer-events-none select-none max-w-{} bg-slate-400 md:text-base top-4 left-4 text-gray-50 transform'
+      className='absolute w-1/4 px-4 py-2 text-sm border-black rounded-lg pointer-events-none select-none max-w-{} bg-slate-400 md:text-base top-4 left-4 text-gray-50 transform'
     >
-      <p className='hidden mb-8 md:block'>
-        Test scene voor interactie in three.js
+      <p className='hidden mb-3 md:block'>
+        Use sliders to interact with the block:
       </p>
-      <Slider
-        value={0}
-        min={0}
-        max={10}
-        step={0.1}
-        onChange={(value) => {
-          useStore.setState({ width: value})
-        }}
-      />
-      <div className='tracking-wider'>
-        Step 1 - <span style={{ color: 'rgb(84, 90, 114)' }}>update:</span>
-        <span style={{ color: 'rgb(249, 196, 232)' }}> @/pages/index </span>
-        <br />
-        Step 2 - <span style={{ color: 'rgb(84, 90, 114)' }}>update:</span>
-        <span style={{ color: 'rgb(249, 196, 232)' }}>
-          {' '}
-          @/components/canvas/Shader/Shader{' '}
-        </span>
-        <br />
-        Step 3 - <span style={{ color: 'rgb(84, 90, 114)' }}>delete:</span>
-        <span style={{ color: 'rgb(249, 196, 232)' }}> @/pages/box </span>
-        <br />
-        Step 4 -{' '}
-        <span style={{ color: 'rgb(84, 90, 114)' }}>update header:</span>
-        <span style={{ color: 'rgb(249, 196, 232)' }}> @/config </span>
-        <br />
-        Step 5 - <span style={{ color: 'rgb(84, 90, 114)' }}>delete:</span>
-        <span style={{ color: 'rgb(249, 196, 232)' }}>
-          {' '}
-          @/components/dom/Instructions
-        </span>
-      </div>
+
+      {Object.values(axes).map((axis, index) => {
+        return (
+          <div key={axis.name}>
+           <a className="mb-3 md:block first-letter:capitalize">{axis.name}:</a>
+            <Slider
+              key={axis.name+"-slider"}
+              value={1}
+              min={0.1}
+              max={10}
+              step={0.1}
+              onChange={( value ) => {
+                axis.func(value)
+              }}
+              onMouseDown={() => {
+                if(controlsRef?.current)
+                controlsRef.current.enabled = false
+              }}
+              onMouseUp={() => {
+                if(controlsRef?.current)
+                controlsRef.current.enabled = true
+              }}
+            />
+          </div>
+        )})
+      }
     </div>
   )
 }

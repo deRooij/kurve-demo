@@ -19,7 +19,11 @@
 
 @layer components {
   .slider-thumb::-webkit-slider-thumb {
-    @apply w-3 h-3 rounded-full cursor-pointer pointer-events-auto
+    @apply bg-slate-500 mt-1 w-5 h-5 rounded-full cursor-pointer z-40 pointer-events-auto;
+  }
+
+  .slider-thumb::-webkit-slider-thumb:hover {
+    @apply bg-blue-700;
   }
 }
 

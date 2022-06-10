@@ -19,7 +19,7 @@ const Controls = () => {
       }
     }
   }, [dom, controlsRef])
-  return <OrbitControls ref={controlsRef} domElement={dom.current} />
+  return <OrbitControls enabled={false} ref={controlsRef} domElement={dom.current} />
 }
 
 export default Controls

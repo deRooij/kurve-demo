@@ -1,6 +1,7 @@
 import BoxComponent from '@/components/canvas/Box'
+import Slider3D from '@/components/canvas/Slider3D'
 import Instructions from '@/components/dom/Instructions'
-import dynamic from 'next/dynamic'
+import { Vector3 } from 'three'
 
 
 // const Box = dynamic(() => import('@/components/canvas/Box'), {
@@ -19,7 +20,8 @@ const Page = (props) => {
 // Three.js canvas component go here:
 Page.r3f = (props) => (
   <>
-    <BoxComponent route='/' />
+    <BoxComponent />
+    <Slider3D position={new Vector3(1.5, 0, -3)} width={3} min={0} max={10}/>
   </>
 )
 

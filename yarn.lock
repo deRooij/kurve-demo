@@ -1322,6 +1322,16 @@
     "@react-spring/shared" "~9.4.5"
     "@react-spring/types" "~9.4.5"
 
+"@react-spring/three@^9.4.5":
+  version "9.4.5"
+  resolved "https://registry.yarnpkg.com/@react-spring/three/-/three-9.4.5.tgz#bd5b7844fde3338b05920654d81f127a5760f057"
+  integrity sha512-mArxfIhg9kyFL/8Y09TarS/ZKLd/qAWS4T3Ro/B46ILPfPnoPywDdw9/rknZihy/tslnviCgMrB4pZ29X1Dfxw==
+  dependencies:
+    "@react-spring/animated" "~9.4.5"
+    "@react-spring/core" "~9.4.5"
+    "@react-spring/shared" "~9.4.5"
+    "@react-spring/types" "~9.4.5"
+
 "@react-spring/types@~9.4.5":
   version "9.4.5"
   resolved "https://registry.npmjs.org/@react-spring/types/-/types-9.4.5.tgz#9c71e5ff866b5484a7ef3db822bf6c10e77bdd8c"
@@ -1542,12 +1552,24 @@
   resolved "https://registry.npmjs.org/@use-gesture/core/-/core-10.2.14.tgz#59f40e1c3717e333cb51aafa77cbe427003b4cef"
   integrity sha512-VNhm74/KwmXohyFc8jD1mwurgo3mwTtl80z7lpM7S45LXsZpZ8U0qzwwINqKamedx1aEc17ycwxJlfCrzfzMSQ==
 
+"@use-gesture/core@10.2.15":
+  version "10.2.15"
+  resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.2.15.tgz#ed55e85211eb6129a7979f177f1831d078087d22"
+  integrity sha512-R8k5GHKR6J3n48K1xiWCBSnTsxmfiVCp+MYPMhFaoHT1/oIjrFA6SeMmWDl0REwP/CpBfNdQ0FwOo/0dGjPhwA==
+
 "@use-gesture/react@^10.2.0":
   version "10.2.14"
   resolved "https://registry.npmjs.org/@use-gesture/react/-/react-10.2.14.tgz#d9e07365c426cbc7d855cb958195114966a58e5d"
   integrity sha512-EZOHTB8hr5D6UWBr/vwOonPAeot4+OWj94C8mbYOYbIKgmCBFrGgK7j5cSnXgpmsRQBBOt77FPywW1O638vBpw==
   dependencies:
     "@use-gesture/core" "10.2.14"
+
+"@use-gesture/react@^10.2.15":
+  version "10.2.15"
+  resolved "https://registry.yarnpkg.com/@use-gesture/react/-/react-10.2.15.tgz#67cf755eb15c1a7feaa2d2ecd372bef485486e61"
+  integrity sha512-Hdfp17a3iHDo33jasd8GIPlIjM4wxNzn1O9apNX2VrF7X2ewzXp4wCCQ4aPqsnyvBA1WhR8KHMrBS/XWQZxTHQ==
+  dependencies:
+    "@use-gesture/core" "10.2.15"
 
 "@webgpu/glslang@^0.0.15":
   version "0.0.15"

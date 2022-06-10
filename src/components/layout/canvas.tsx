@@ -5,15 +5,11 @@ import { Preload } from '@react-three/drei'
 import Stage from './stage'
 
 const CanvasComponent = ({ children }) => {
-
-  const height = useStore((state) => state.height)
-
   const dom = useStore((state) => state.dom)
 
   return (
     <Canvas
       shadows
-      mode='concurrent'
       style={{
         position: 'absolute',
         top: 0,
