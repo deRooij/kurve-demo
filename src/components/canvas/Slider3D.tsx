@@ -1,6 +1,6 @@
 import useStore from "@/helpers/store"
 import { useSpring, animated } from "@react-spring/three"
-import { useThree } from "@react-three/fiber"
+import { act, useThree } from "@react-three/fiber"
 import { useDrag } from "@use-gesture/react"
 import { useEffect, useRef, useState } from "react"
 import { Plane, Vector3 } from "three"
@@ -28,12 +28,18 @@ const Slider3D = ({
 
   const [pos, setPos] = useState([thumbPos, 0, 0])
   const [hovered, setHovered] = useState(false)
+  const [dragging, setDragging] = useState(false)
 
   const [spring, api] = useSpring(() => ({
     position: pos,
     scale: 1,
     config: { friction: 12 }
   }));
+
+  api.start({
+     position: pos,
+    scale: dragging ? 0.9 : hovered ? 1.2 : 1
+  })
 
    let planeIntersectPoint = new Vector3();
    const bind = useDrag(
@@ -47,21 +53,15 @@ const Slider3D = ({
 
         const sliderValue = clamp((Math.abs(pos[0]) / 3) * 10, 0.1, 10)
         useStore.setState({width: sliderValue})
-
-         
       }
 
-      setIsDragging(active);
-
-      api.start({
-        position: pos,
-        scale: active ? 1.2 : hovered ? 1.4 : 1,
-
-      });
+      setIsDragging(active)
+      setDragging(active)
       return timeStamp;
     },
-    { delay: true }
-  );
+    { delay: false }
+  )
+
   return (
     <>
      <group position={origin}>
@@ -71,7 +71,7 @@ const Slider3D = ({
         <meshBasicMaterial color="black" />
       </mesh>
       {/* Thumb */}
-      <animated.mesh castShadow {...spring} {...bind()} >
+      <animated.mesh castShadow {...spring} {...bind()} onPointerOver={() => {setHovered(true)}} onPointerLeave={() => {setHovered(false)}} >
         <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
         <meshBasicMaterial color="red"/>
       </animated.mesh>
