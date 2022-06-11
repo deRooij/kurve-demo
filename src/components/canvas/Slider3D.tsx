@@ -3,27 +3,31 @@ import { useSpring, animated } from "@react-spring/three"
 import { act, useThree } from "@react-three/fiber"
 import { useDrag } from "@use-gesture/react"
 import { useEffect, useRef, useState } from "react"
-import { Plane, Vector3 } from "three"
+import { Euler, Plane, Vector3 } from "three"
 import { clamp } from "three/src/math/MathUtils"
 
 export interface Slider3DProps{
   origin: Vector3
-  width: number
+  orientation: Euler
+  direction: string
+  length: number
   min: number
   max: number
   floorPlane: Plane
-  setIsDragging: (value: boolean) => void 
+  setIsSliding: (value: boolean) => void 
 }
 
 const Slider3D = ({
   origin,
-  width,
+  orientation,
+  direction,
+  length,
   min,
   max,
   floorPlane,
-  setIsDragging
+  setIsSliding
 }: Slider3DProps) => {
-  const thumbPos = -((useStore((state) => state.width) / max) * width)
+  const thumbPos = -((useStore((state) => state.width) / max) * length)
   const xPos = -origin.x
 
   const [pos, setPos] = useState([thumbPos, 0, 0])
@@ -47,7 +51,7 @@ const Slider3D = ({
       if (active) {
         event.ray.intersectPlane(floorPlane, planeIntersectPoint);
 
-        const xPosition = clamp(planeIntersectPoint.x - origin.x, -width, 0)
+        const xPosition = clamp(planeIntersectPoint.x - origin.x, -length, 0)
         const localPosition = [xPosition, 0, 0]
         setPos(localPosition);
 
@@ -55,7 +59,7 @@ const Slider3D = ({
         useStore.setState({width: sliderValue})
       }
 
-      setIsDragging(active)
+      setIsSliding(active)
       setDragging(active)
       return timeStamp;
     },
@@ -64,29 +68,28 @@ const Slider3D = ({
 
   return (
     <>
-     <group position={origin}>
-      {/* Track: */}
-      <mesh castShadow position={[xPos, 0, 0]} rotation={[0, 0, Math.PI * 0.5]}>
-        <cylinderBufferGeometry args={[0.025, 0.025, width + 0.2, 16, 5]}  />
-        <meshBasicMaterial color="black" />
-      </mesh>
-      {/* Thumb */}
-      <animated.mesh castShadow {...spring} {...bind()} onPointerOver={() => {setHovered(true)}} onPointerLeave={() => {setHovered(false)}} >
-        <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
-        <meshBasicMaterial color="red"/>
-      </animated.mesh>
-      {/* Left border */}
-      <mesh castShadow position={[0.15, 0, 0]}>
-        <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
-        <meshBasicMaterial color="black" />
-      </mesh>
-      {/* Right border */}
-      <mesh castShadow position={[-width - 0.15, 0, 0]}>
-        <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
-        <meshBasicMaterial color="black" />
-      </mesh>
-    </group>
-
+      <group position={origin}>
+        {/* Track: */}
+        <mesh castShadow position={[xPos, 0, 0]} rotation={[0, 0, Math.PI * 0.5]}>
+          <cylinderBufferGeometry args={[0.025, 0.025, length + 0.2, 16, 5]}  />
+          <meshBasicMaterial color="black" />
+        </mesh>
+        {/* Thumb */}
+        <animated.mesh castShadow {...spring} {...bind()} onPointerOver={() => {setHovered(true)}} onPointerLeave={() => {setHovered(false)}} >
+          <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
+          <meshBasicMaterial color="red"/>
+        </animated.mesh>
+        {/* Left border */}
+        <mesh castShadow position={[0.15, 0, 0]}>
+          <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
+          <meshBasicMaterial color="black" />
+        </mesh>
+        {/* Right border */}
+        <mesh castShadow position={[-length - 0.15, 0, 0]}>
+          <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
+          <meshBasicMaterial color="black" />
+        </mesh>
+      </group>
     </>
   )
 }
