@@ -17,7 +17,7 @@ export interface Slider3DProps {
   setIsSliding: (value: boolean) => void
 }
 
-const Slider3D = ({
+const YSlider = ({
   origin,
   orientation,
   direction,
@@ -29,6 +29,8 @@ const Slider3D = ({
 }: Slider3DProps) => {
   const thumbPos = -((useStore((state) => state.width) / max) * length)
   const xPos = -origin.x
+
+  const { camera } = useThree()
 
   const [pos, setPos] = useState([thumbPos, 0, 0])
   const [hovered, setHovered] = useState(false)
@@ -46,18 +48,21 @@ const Slider3D = ({
   })
 
   let planeIntersectPoint = new Vector3()
+  const floorplane = new Plane(new Vector3(-1, 0, -1), 0)
+
   const bind = useDrag(
     ({ active, timeStamp, event }) => {
       if (active) {
         // @ts-ignore
-        event.ray.intersectPlane(floorPlane, planeIntersectPoint)
+        event.ray.intersectPlane(floorplane, planeIntersectPoint)
 
-        const xPosition = clamp(planeIntersectPoint.x - origin.x, -length, 0)
-        const localPosition = [xPosition, 0, 0]
+        console.log(planeIntersectPoint.y)
+        const xPosition = clamp(planeIntersectPoint.y - 0.3, 0, 3)
+        const localPosition = [0, xPosition, 0]
         setPos(localPosition)
 
-        const sliderValue = clamp((Math.abs(pos[0]) / 3) * 10, 0.1, 10)
-        useStore.setState({ width: sliderValue })
+        const sliderValue = clamp((Math.abs(pos[1]) / length) * max, 0.1, 10)
+        useStore.setState({ height: sliderValue })
       }
 
       setIsSliding(active)
@@ -71,11 +76,7 @@ const Slider3D = ({
     <>
       <group position={origin}>
         {/* Track: */}
-        <mesh
-          castShadow
-          position={[xPos, 0, 0]}
-          rotation={[0, 0, Math.PI * 0.5]}
-        >
+        <mesh castShadow position={[0, length / 2, 0]}>
           <cylinderBufferGeometry args={[0.025, 0.025, length + 0.2, 16, 5]} />
           <meshBasicMaterial color='black' />
         </mesh>
@@ -96,13 +97,13 @@ const Slider3D = ({
           <meshBasicMaterial color='red' />
         </animated.mesh>
         {/* Left border */}
-        <mesh castShadow position={[0.15, 0, 0]}>
-          <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
+        <mesh castShadow position={[0, -0.15, 0]}>
+          <boxBufferGeometry args={[0.2, 0.1, 0.2]} />
           <meshBasicMaterial color='black' />
         </mesh>
         {/* Right border */}
-        <mesh castShadow position={[-length - 0.15, 0, 0]}>
-          <boxBufferGeometry args={[0.1, 0.2, 0.2]} />
+        <mesh castShadow position={[0, length + 0.15, 0]}>
+          <boxBufferGeometry args={[0.2, 0.1, 0.2]} />
           <meshBasicMaterial color='black' />
         </mesh>
       </group>
@@ -110,4 +111,4 @@ const Slider3D = ({
   )
 }
 
-export default Slider3D
+export default YSlider
