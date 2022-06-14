@@ -1,17 +1,13 @@
 import useStore from '@/helpers/store'
 import { useSpring, animated } from '@react-spring/three'
-import { act, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
-import { useEffect, useRef, useState } from 'react'
-import { Euler, Plane, Vector3 } from 'three'
+import { useEffect, useState } from 'react'
+import { Plane, Vector3 } from 'three'
 import { clamp } from 'three/src/math/MathUtils'
 
 export interface Slider3DProps {
   origin: Vector3
-  orientation: Euler
-  direction: string
   length: number
-  min: number
   max: number
   floorPlane: Plane
   setIsSliding: (value: boolean) => void
@@ -19,22 +15,27 @@ export interface Slider3DProps {
 
 const ZSlider = ({
   origin,
-  orientation,
-  direction,
   length,
-  min,
   max,
   floorPlane,
   setIsSliding,
 }: Slider3DProps) => {
-  const thumbPos = -((useStore((state) => state.width) / max) * length)
-  const xPos = -origin.x
+  const thumbPos = -((useStore((state) => state.depth) / max) * length)
 
-  const { camera } = useThree()
+  // const listeners = [
+  //   useStore((state) => state.width),
+  //   useStore((state) => state.height),
+  //   useStore((state) => state.depth),
+  // ]
 
-  const [pos, setPos] = useState([thumbPos, 0, 0])
+  const [pos, setPos] = useState([0, 0, thumbPos])
   const [hovered, setHovered] = useState(false)
   const [dragging, setDragging] = useState(false)
+
+  const storeValue = useStore((state) => state.depth)
+  useEffect(() => {
+    setPos([0, 0, (-storeValue / max) * length])
+  }, [storeValue, max, length])
 
   const [spring, api] = useSpring(() => ({
     position: pos,
@@ -48,16 +49,14 @@ const ZSlider = ({
   })
 
   let planeIntersectPoint = new Vector3()
-  const floorplane = new Plane(new Vector3(0, 1, 0), 0)
 
   const bind = useDrag(
     ({ active, timeStamp, event }) => {
       if (active) {
         // @ts-ignore
-        event.ray.intersectPlane(floorplane, planeIntersectPoint)
+        event.ray.intersectPlane(floorPlane, planeIntersectPoint)
 
-        console.log(planeIntersectPoint.z)
-        const zPosition = clamp(planeIntersectPoint.z + (length + 0.3), -3, 0)
+        const zPosition = clamp(planeIntersectPoint.z, -3, 0)
         const localPosition = [0, 0, zPosition]
         setPos(localPosition)
 

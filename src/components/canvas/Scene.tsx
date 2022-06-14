@@ -15,37 +15,31 @@ const Scene = () => {
     if (controlsRef?.current) controlsRef.current.enabled = !isSliding
   }, [isSliding, controlsRef])
 
+  const intersectPlane = new Plane(new Vector3(0, 1, 0), 0)
+
   return (
     <>
       <BoxComponent />
+
       <XSlider
-        origin={new Vector3(1.7, 0, -3)}
-        orientation={new Euler(0, 0, 0)}
-        direction='x'
+        origin={new Vector3(1.7, 0, 0)}
         length={3}
-        min={0}
         max={10}
-        floorPlane={new Plane(new Vector3(0, 1, 0), 0)}
+        floorPlane={intersectPlane}
         setIsSliding={setIsSliding}
       />
       <YSlider
-        origin={new Vector3(2, 0.3, -3)}
-        orientation={new Euler(0, 0, -Math.PI * 0.5)}
-        direction='y'
+        origin={new Vector3(2, 0.3, 0)}
         length={3}
-        min={0}
         max={10}
-        floorPlane={null}
+        intersectPlane={intersectPlane}
         setIsSliding={setIsSliding}
       />
       <ZSlider
-        origin={new Vector3(2, 0, -3.3)}
-        orientation={new Euler(0, 0, -Math.PI * 0.5)}
-        direction='y'
+        origin={new Vector3(2, 0, -0.3)}
         length={3}
-        min={0}
         max={10}
-        floorPlane={null}
+        floorPlane={intersectPlane}
         setIsSliding={setIsSliding}
       />
     </>

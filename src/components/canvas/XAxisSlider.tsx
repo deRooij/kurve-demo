@@ -1,17 +1,13 @@
 import useStore from '@/helpers/store'
 import { useSpring, animated } from '@react-spring/three'
-import { act, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
-import { useEffect, useRef, useState } from 'react'
-import { Euler, Plane, Vector3 } from 'three'
+import { useEffect, useState } from 'react'
+import { Plane, Vector3 } from 'three'
 import { clamp } from 'three/src/math/MathUtils'
 
 export interface Slider3DProps {
   origin: Vector3
-  orientation: Euler
-  direction: string
   length: number
-  min: number
   max: number
   floorPlane: Plane
   setIsSliding: (value: boolean) => void
@@ -19,20 +15,21 @@ export interface Slider3DProps {
 
 const XSlider = ({
   origin,
-  orientation,
-  direction,
   length,
-  min,
   max,
   floorPlane,
   setIsSliding,
 }: Slider3DProps) => {
   const thumbPos = -((useStore((state) => state.width) / max) * length)
-  const xPos = -origin.x
 
   const [pos, setPos] = useState([thumbPos, 0, 0])
   const [hovered, setHovered] = useState(false)
   const [dragging, setDragging] = useState(false)
+
+  const storeValue = useStore((state) => state.width)
+  useEffect(() => {
+    setPos([(-storeValue / max) * length, 0, 0])
+  }, [storeValue, max, length])
 
   const [spring, api] = useSpring(() => ({
     position: pos,
@@ -51,8 +48,6 @@ const XSlider = ({
       if (active) {
         // @ts-ignore
         event.ray.intersectPlane(floorPlane, planeIntersectPoint)
-
-        console.log(planeIntersectPoint.x)
         const xPosition = clamp(planeIntersectPoint.x - origin.x, -length, 0)
         const localPosition = [xPosition, 0, 0]
         setPos(localPosition)

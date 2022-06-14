@@ -9,17 +9,12 @@ const BoxComponent = () => {
   const depth = useStore((state) => state.depth)
 
   const mesh = useRef(null)
-  
+
   const [clicked, setClicked] = useState(false)
   const [hovered, setHover] = useState(false)
-  
-  const [spring, api] = useSpring(() => ({
-    scale: 1,
-  }))
 
-  api.start({ scale: hovered ? 1.2 : 1})
-
-  useFrame((state, delta) => {}
+  useFrame(
+    (state, delta) => {}
     // mesh.current
     //   ? (mesh.current.rotation.y = mesh.current.rotation.x += 0.01)
     //   : null
@@ -30,14 +25,20 @@ const BoxComponent = () => {
         castShadow
         receiveShadow
         ref={mesh}
-        onClick={() => {clicked ? setClicked(false) : setClicked(true)}}
+        onClick={() => {
+          clicked ? setClicked(false) : setClicked(true)
+        }}
         onPointerOver={() => setHover(true)}
         onPointerOut={() => setHover(false)}
-        position={[0, height / 2, 0]}
-        {...spring}
+        position={[-width / 2 + 1, height / 2, -depth / 2 - 1]}
       >
         <boxBufferGeometry args={[width, height, depth]} />
-        <meshPhysicalMaterial roughness={1} transparent opacity={0.6} color={clicked ? 'lightblue' : hovered ? 'aquamarine' : 'white'} />
+        <meshPhysicalMaterial
+          roughness={1}
+          transparent
+          opacity={0.6}
+          color={clicked ? 'lightblue' : hovered ? 'aquamarine' : 'white'}
+        />
       </animated.mesh>
     </>
   )
