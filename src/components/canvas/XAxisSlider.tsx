@@ -78,7 +78,7 @@ const XSlider = ({
           rotation={[0, 0, Math.PI * 0.5]}
         >
           <cylinderBufferGeometry args={[0.025, 0.025, length + 0.2, 16, 5]} />
-          <meshBasicMaterial color='black' />
+          <meshBasicMaterial color='red' />
         </mesh>
         {/* Thumb */}
         {/* @ts-ignore */}

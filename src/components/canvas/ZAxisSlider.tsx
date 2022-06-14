@@ -82,7 +82,7 @@ const ZSlider = ({
           rotation={[-Math.PI * 0.5, 0, 0]}
         >
           <cylinderBufferGeometry args={[0.025, 0.025, length + 0.2, 16, 5]} />
-          <meshBasicMaterial color='black' />
+          <meshBasicMaterial color='blue' />
         </mesh>
         {/* Thumb */}
         {/* @ts-ignore */}
@@ -98,7 +98,7 @@ const ZSlider = ({
           }}
         >
           <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
-          <meshBasicMaterial color='red' />
+          <meshBasicMaterial color='blue' />
         </animated.mesh>
         {/* Left border */}
         <mesh castShadow position={[0, 0, 0.15]}>

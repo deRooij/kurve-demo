@@ -48,7 +48,7 @@ const YSlider = ({
   })
 
   let planeIntersectPoint = new Vector3()
-  const floorplane = new Plane(new Vector3(-1, 0, -1), 0)
+  const floorplane = new Plane(new Vector3(1, 0.5, 1), 0)
 
   const bind = useDrag(
     ({ active, timeStamp, event }) => {
@@ -57,8 +57,8 @@ const YSlider = ({
         event.ray.intersectPlane(floorplane, planeIntersectPoint)
 
         console.log(planeIntersectPoint.y)
-        const xPosition = clamp(planeIntersectPoint.y - 0.3, 0, 3)
-        const localPosition = [0, xPosition, 0]
+        const yPosition = clamp(planeIntersectPoint.y - 0.2, 0, 3)
+        const localPosition = [0, yPosition, 0]
         setPos(localPosition)
 
         const sliderValue = clamp((Math.abs(pos[1]) / length) * max, 0.1, 10)
@@ -78,7 +78,7 @@ const YSlider = ({
         {/* Track: */}
         <mesh castShadow position={[0, length / 2, 0]}>
           <cylinderBufferGeometry args={[0.025, 0.025, length + 0.2, 16, 5]} />
-          <meshBasicMaterial color='black' />
+          <meshBasicMaterial color='green' />
         </mesh>
         {/* Thumb */}
         {/* @ts-ignore */}
@@ -94,7 +94,7 @@ const YSlider = ({
           }}
         >
           <boxBufferGeometry args={[0.25, 0.25, 0.25]} />
-          <meshBasicMaterial color='red' />
+          <meshBasicMaterial color='green' />
         </animated.mesh>
         {/* Left border */}
         <mesh castShadow position={[0, -0.15, 0]}>
