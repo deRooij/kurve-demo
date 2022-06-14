@@ -48,16 +48,21 @@ const YSlider = ({
   })
 
   let planeIntersectPoint = new Vector3()
-  const floorplane = new Plane(new Vector3(1, 0.5, 1), 0)
+  const referencePlane = new Plane(new Vector3(0, 0, 0), 0)
 
   const bind = useDrag(
     ({ active, timeStamp, event }) => {
       if (active) {
+        referencePlane.setFromNormalAndCoplanarPoint(
+          camera.position.clone().normalize(),
+          new Vector3(2, 0, -3)
+        )
+
         // @ts-ignore
-        event.ray.intersectPlane(floorplane, planeIntersectPoint)
+        event.ray.intersectPlane(referencePlane, planeIntersectPoint)
 
         console.log(planeIntersectPoint.y)
-        const yPosition = clamp(planeIntersectPoint.y - 0.2, 0, 3)
+        const yPosition = clamp(planeIntersectPoint.y, 0, 3)
         const localPosition = [0, yPosition, 0]
         setPos(localPosition)
 
